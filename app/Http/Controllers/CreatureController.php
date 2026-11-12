@@ -72,4 +72,14 @@ class CreatureController extends Controller
 
         return back();
     }
+
+    public function sleep(Creature $creature): RedirectResponse
+    {
+        $creature->update([
+            'energy' => min(100, $creature->energy + 25),
+            'food' => max(0, $creature->food - 5),
+        ]);
+
+        return back();
+    }
 }

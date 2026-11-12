@@ -16,6 +16,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('creatures', CreatureController::class)->except(['index', 'show']);
     Route::post('creatures/{creature}/jouer', [CreatureController::class, 'play'])->name('creatures.play');
+    Route::post('creatures/{creature}/dormir', [CreatureController::class, 'sleep'])->name('creatures.sleep');
 
     Route::get('enclos/{user}', [EnclosureController::class, 'show'])->name('enclosures.show');
     Route::patch('enclos', [EnclosureController::class, 'update'])->name('enclosures.update');

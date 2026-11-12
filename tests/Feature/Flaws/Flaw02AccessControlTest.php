@@ -35,6 +35,14 @@ test('a player cannot play with someone else\'s creature', function () {
     expect($this->braise->fresh()->mood)->toBe(50);
 });
 
+test('a player cannot put someone else\'s creature to sleep', function () {
+    $this->actingAs($this->mallory)
+        ->post("/creatures/{$this->braise->id}/dormir")
+        ->assertForbidden();
+
+    expect($this->braise->fresh()->energy)->toBe(50);
+});
+
 test('a player cannot release someone else\'s creature', function () {
     $this->actingAs($this->mallory)
         ->delete("/creatures/{$this->braise->id}")

@@ -69,6 +69,17 @@ test('a player can play with their creature', function () {
         ->toBe(['food' => 40, 'mood' => 65, 'energy' => 40]);
 });
 
+test('a player can put their creature to sleep', function () {
+    $creature = Creature::factory()->create(['food' => 50, 'mood' => 50, 'energy' => 50]);
+
+    $this->actingAs($creature->user)
+        ->post("/creatures/{$creature->id}/dormir")
+        ->assertRedirect();
+
+    expect($creature->fresh()->only('food', 'mood', 'energy'))
+        ->toBe(['food' => 45, 'mood' => 50, 'energy' => 75]);
+});
+
 test('a player can release their creature', function () {
     $creature = Creature::factory()->create();
 
