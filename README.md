@@ -19,11 +19,11 @@ composer run dev
 
 Tous les comptes ont le mot de passe `password`.
 
-| Compte | Adresse | Rôle dans le cours |
-|---|---|---|
-| Alice | `alice@example.com` | la victime : deux créatures, 120 € |
-| Mallory | `mallory@example.com` | l'attaquante : une créature, 5 € |
-| Bob | `bob@example.com` | un joueur de plus : deux créatures, 0,30 € |
+| Compte  | Adresse               | Rôle dans le cours                         |
+| ------- | --------------------- | ------------------------------------------ |
+| Alice   | `alice@example.com`   | la victime : deux créatures, 120 €         |
+| Mallory | `mallory@example.com` | l'attaquante : une créature, 5 €           |
+| Bob     | `bob@example.com`     | un joueur de plus : deux créatures, 0,30 € |
 
 ## Les tests
 
