@@ -12,8 +12,17 @@ export default defineConfig({
             input: ['resources/css/app.css', 'resources/js/app.ts'],
             refresh: true,
             fonts: [
-                bunny('Instrument Sans', {
-                    weights: [400, 500, 600],
+                bunny('Nunito', {
+                    weights: [600, 700, 800],
+                    subsets: ['latin', 'latin-ext'],
+                }),
+                bunny('Pixelify Sans', {
+                    weights: [500, 700],
+                    subsets: ['latin', 'latin-ext'],
+                }),
+                bunny('Space Mono', {
+                    weights: [400, 700],
+                    subsets: ['latin', 'latin-ext'],
                 }),
             ],
         }),

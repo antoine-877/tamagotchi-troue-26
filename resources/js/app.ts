@@ -31,7 +31,8 @@ void createInertiaApp({
         });
     },
     progress: {
-        color: '#4B5563',
+        // Rose of the palette: visible on paper and on ink (« mode nuit »).
+        color: '#FF5FA2',
     },
 });
 
