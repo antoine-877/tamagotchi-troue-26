@@ -1,8 +1,9 @@
 <script setup>
 import { Form, Head } from '@inertiajs/vue3';
 import CreatureController from '@/actions/App/Http/Controllers/CreatureController';
-import CreatureCard from '@/components/CreatureCard.vue';
+import GaugeCard from '@/components/GaugeCard.vue';
 import InputError from '@/components/InputError.vue';
+import TamagotchiDevice from '@/components/TamagotchiDevice.vue';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -17,6 +18,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
+import { moodOf } from '@/lib/mood';
+import { gauges, species } from '@/lib/species';
 import { dashboard } from '@/routes';
 
 defineOptions({
@@ -25,6 +28,7 @@ defineOptions({
             { title: 'Mes créatures', href: dashboard() },
             { title: 'Modifier', href: '#' },
         ],
+        bleed: true,
     },
 });
 
@@ -36,56 +40,116 @@ defineProps({
 <template>
     <Head :title="`Modifier ${creature.name}`" />
 
-    <div class="grid max-w-4xl gap-6 p-4 md:grid-cols-2">
-        <CreatureCard :creature="creature">
-            <Form v-bind="CreatureController.play.form(creature.id)">
-                <Button type="submit" variant="secondary">Jouer</Button>
-            </Form>
-        </CreatureCard>
+    <div
+        class="mx-auto grid w-full max-w-[1280px] gap-10 px-4 pt-6 pb-12 sm:px-8 lg:grid-cols-12 lg:gap-x-8"
+    >
+        <section
+            aria-label="La créature"
+            class="flex min-w-0 flex-col items-center gap-6 lg:col-span-6"
+        >
+            <p
+                class="flex flex-wrap justify-between gap-x-6 gap-y-1 self-stretch border-b-2 border-border pb-1.5 kicker"
+            >
+                <span>
+                    Fiche n° {{ String(creature.id).padStart(3, '0') }} ·
+                    {{ species[creature.species]?.label ?? 'Créature' }}
+                </span>
+                <span>Humeur : {{ moodOf(creature).word }}</span>
+            </p>
 
-        <div class="space-y-8">
+            <TamagotchiDevice
+                :creature="creature"
+                :state="moodOf(creature).state"
+            >
+                <Form
+                    v-bind="CreatureController.play.form(creature.id)"
+                    :options="{ preserveScroll: true }"
+                    #default="{ processing }"
+                >
+                    <button
+                        type="submit"
+                        class="device-key"
+                        :disabled="processing"
+                    >
+                        Jouer
+                    </button>
+                </Form>
+            </TamagotchiDevice>
+
+            <div class="grid w-full gap-3 min-[480px]:grid-cols-3 sm:gap-4">
+                <GaugeCard
+                    v-for="(label, gauge) in gauges"
+                    :key="gauge"
+                    :gauge="gauge"
+                    :value="creature[gauge]"
+                />
+            </div>
+        </section>
+
+        <div class="flex min-w-0 flex-col gap-10 lg:col-span-6">
+            <h1
+                class="pixel-title text-[clamp(2.5rem,8vw,4.5rem)] [overflow-wrap:anywhere] uppercase"
+            >
+                {{ creature.name }}
+            </h1>
+
             <Form
                 v-bind="CreatureController.update.form(creature.id)"
                 v-slot="{ errors, processing }"
-                class="space-y-4"
+                class="flex flex-col gap-4 border-t-4 border-border pt-3"
                 novalidate
             >
-                <h1 class="text-xl font-semibold">Renommer</h1>
+                <h2 class="pixel-title text-[28px]">Renommer</h2>
+                <p>Un nouveau nom, et c'est tout&nbsp;: les jauges restent.</p>
 
-                <div class="grid gap-2">
-                    <Label for="name">Nom</Label>
+                <div class="flex max-w-md flex-col gap-2">
+                    <Label for="name" class="kicker">Nom</Label>
                     <Input
                         id="name"
                         name="name"
+                        autocomplete="off"
+                        class="h-12 text-lg"
                         :default-value="creature.name"
                     />
                     <InputError :message="errors.name" />
                 </div>
 
-                <Button type="submit" :disabled="processing">
+                <Button type="submit" class="self-start" :disabled="processing">
                     <Spinner v-if="processing" />
                     Enregistrer
                 </Button>
             </Form>
 
-            <div class="space-y-4">
-                <h2 class="text-lg font-semibold">Relâcher</h2>
-                <p class="text-sm text-muted-foreground">
+            <section
+                aria-labelledby="release-title"
+                class="flex flex-col items-start gap-3 border-4 border-destructive p-4 text-destructive"
+            >
+                <h2 id="release-title" class="pixel-title text-[28px]">
+                    Relâcher
+                </h2>
+                <p class="font-extrabold">
                     Une créature relâchée ne revient pas.
+                </p>
+                <p class="text-foreground">
+                    {{ creature.name }} quitte votre enclos pour de bon, avec
+                    ses jauges.
                 </p>
 
                 <Dialog>
                     <DialogTrigger as-child>
-                        <Button variant="destructive">
+                        <Button
+                            variant="destructive"
+                            class="h-auto min-h-11 max-w-full py-2 text-left [overflow-wrap:anywhere] whitespace-normal"
+                        >
                             Relâcher {{ creature.name }}
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
                         <DialogHeader>
-                            <DialogTitle>
+                            <DialogTitle class="pixel-title text-2xl">
                                 Relâcher {{ creature.name }} ?
                             </DialogTitle>
-                            <DialogDescription>
+                            <DialogDescription class="text-foreground">
                                 Cette action est définitive.
                             </DialogDescription>
                         </DialogHeader>
@@ -105,7 +169,7 @@ defineProps({
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
-            </div>
+            </section>
         </div>
     </div>
 </template>

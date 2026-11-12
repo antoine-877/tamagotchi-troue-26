@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import Heading from '@/components/Heading.vue';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 import { useCurrentUrl } from '@/composables/useCurrentUrl';
 import { toUrl } from '@/lib/utils';
 import { edit as editAppearance } from '@/routes/appearance';
@@ -26,42 +23,58 @@ const sidebarNavItems: NavItem[] = [
 ];
 
 const { isCurrentOrParentUrl } = useCurrentUrl();
+
+const number = (index: number) => String(index + 1).padStart(2, '0');
 </script>
 
 <template>
-    <div class="px-4 py-6">
-        <Heading
-            title="Réglages"
-            description="Gérez votre profil et les réglages de votre compte"
-        />
+    <div class="px-4 py-6 sm:px-4">
+        <header class="mb-8 border-b-4 border-border pb-4">
+            <p class="kicker">Votre compte</p>
+            <h2 class="mt-2 pixel-title text-[clamp(3rem,10vw,6rem)] uppercase">
+                Réglages
+            </h2>
+            <p class="mt-3 text-[17px]">
+                Gérez votre profil et les réglages de votre compte
+            </p>
+        </header>
 
-        <div class="flex flex-col lg:flex-row lg:space-x-12">
-            <aside class="w-full max-w-xl lg:w-48">
-                <nav
-                    class="flex flex-col space-y-1 space-x-0"
-                    aria-label="Réglages"
-                >
-                    <Button
-                        v-for="item in sidebarNavItems"
-                        :key="toUrl(item.href)"
-                        variant="ghost"
-                        :class="[
-                            'w-full justify-start',
-                            { 'bg-muted': isCurrentOrParentUrl(item.href) },
-                        ]"
-                        as-child
+        <div class="flex flex-col gap-10 lg:flex-row lg:gap-14">
+            <aside class="w-full lg:w-56 lg:shrink-0">
+                <nav aria-label="Réglages">
+                    <ul
+                        class="grid grid-cols-3 border-2 border-border lg:grid-cols-1 lg:border-0 lg:border-t-2"
                     >
-                        <Link :href="item.href">
-                            <component :is="item.icon" class="h-4 w-4" />
-                            {{ item.title }}
-                        </Link>
-                    </Button>
+                        <li
+                            v-for="(item, index) in sidebarNavItems"
+                            :key="toUrl(item.href)"
+                            class="border-border not-last:border-r-2 lg:border-b-2 lg:not-last:border-r-0"
+                        >
+                            <Link
+                                :href="item.href"
+                                :aria-current="
+                                    isCurrentOrParentUrl(item.href)
+                                        ? 'page'
+                                        : undefined
+                                "
+                                class="flex min-h-14 flex-col items-center justify-center gap-0.5 px-1 text-center font-extrabold lg:flex-row lg:justify-start lg:gap-3 lg:px-3 lg:text-left"
+                                :class="
+                                    isCurrentOrParentUrl(item.href)
+                                        ? 'bg-primary text-primary-foreground'
+                                        : 'hover:bg-accent hover:text-accent-foreground'
+                                "
+                            >
+                                <span class="font-mono text-[13px]">{{
+                                    number(index)
+                                }}</span>
+                                {{ item.title }}
+                            </Link>
+                        </li>
+                    </ul>
                 </nav>
             </aside>
 
-            <Separator class="my-6 lg:hidden" />
-
-            <div class="flex-1 md:max-w-2xl">
+            <div class="min-w-0 flex-1 md:max-w-2xl">
                 <section class="max-w-xl space-y-12">
                     <slot />
                 </section>

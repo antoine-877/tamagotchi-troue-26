@@ -1,41 +1,78 @@
-<script setup lang="ts">
+<script setup>
 import { Link } from '@inertiajs/vue3';
-import AppLogoIcon from '@/components/AppLogoIcon.vue';
+import { computed } from 'vue';
+import AppLogo from '@/components/AppLogo.vue';
+import CreatureSprite from '@/components/CreatureSprite.vue';
+import CropMarks from '@/components/CropMarks.vue';
+import LcdScreen from '@/components/LcdScreen.vue';
+import { species } from '@/lib/species';
 import { home } from '@/routes';
 
-defineProps<{
-    title?: string;
-    description?: string;
-}>();
+const props = defineProps({
+    title: { type: String, default: '' },
+    description: { type: String, default: '' },
+});
+
+// A creature keeps watch on the form; each page gets its own species.
+const watcher = computed(() => {
+    const keys = Object.keys(species);
+
+    return keys[props.title.length % keys.length];
+});
 </script>
 
 <template>
     <div
-        class="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10"
+        class="relative flex min-h-svh flex-col bg-lilac px-4 pt-3 pb-12 text-ink [--ring:var(--color-night)] sm:px-8"
     >
-        <div class="w-full max-w-sm">
-            <div class="flex flex-col gap-8">
-                <div class="flex flex-col items-center gap-4">
-                    <Link
-                        :href="home()"
-                        class="flex flex-col items-center gap-2 font-medium"
+        <CropMarks />
+
+        <header
+            class="mx-auto flex w-full max-w-[1100px] flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b-2 border-ink pb-2"
+        >
+            <Link :href="home()" class="-my-1 py-1">
+                <AppLogo />
+                <span class="sr-only">, retour à l'accueil</span>
+            </Link>
+            <span class="kicker max-sm:hidden">Espace joueur</span>
+        </header>
+
+        <div
+            class="mx-auto mt-8 grid w-full max-w-[1100px] flex-1 content-start items-center gap-8 lg:mt-0 lg:grid-cols-[1fr_minmax(0,460px)] lg:content-center lg:gap-16"
+        >
+            <div class="flex flex-col gap-4">
+                <div class="flex items-center gap-4 lg:flex-col lg:items-start">
+                    <LcdScreen
+                        :grain="6"
+                        class="grid size-20 shrink-0 place-items-center rounded-[14px] border-4 border-ink lg:size-44 lg:rounded-[20px]"
                     >
-                        <div
-                            class="mb-1 flex h-9 w-9 items-center justify-center rounded-md"
-                        >
-                            <AppLogoIcon
-                                class="size-9 fill-current text-[var(--foreground)] dark:text-white"
-                            />
-                        </div>
-                        <span class="sr-only">{{ title }}</span>
-                    </Link>
-                    <div class="space-y-2 text-center">
-                        <h1 class="text-xl font-medium">{{ title }}</h1>
-                        <p class="text-center text-sm text-muted-foreground">
-                            {{ description }}
+                        <CreatureSprite
+                            :species="watcher"
+                            class="size-14 lg:size-32"
+                        />
+                    </LcdScreen>
+                    <div class="flex min-w-0 flex-col gap-2">
+                        <p class="kicker">
+                            {{ species[watcher].label }} de garde
                         </p>
+                        <h1
+                            class="pixel-title text-[clamp(2rem,8vw,2.75rem)] text-balance lg:text-[clamp(3rem,5vw,4.25rem)]"
+                        >
+                            {{ title }}
+                        </h1>
                     </div>
                 </div>
+                <p
+                    v-if="description"
+                    class="max-w-[30rem] text-[17px] text-pretty"
+                >
+                    {{ description }}
+                </p>
+            </div>
+
+            <div
+                class="min-w-0 border-4 border-ink bg-card p-5 text-card-foreground shadow-[8px_8px_0_0_var(--color-ink)] [--ring:var(--color-night)] sm:p-8 dark:[--ring:var(--color-acid)]"
+            >
                 <slot />
             </div>
         </div>
