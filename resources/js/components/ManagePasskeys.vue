@@ -2,7 +2,7 @@
 import { router } from '@inertiajs/vue3';
 import { KeyRound } from '@lucide/vue';
 import type { Passkey } from '@/types/auth';
-import Heading from '@/components/Heading.vue';
+import SectionHeading from '@/components/SectionHeading.vue';
 import PasskeyItem from '@/components/PasskeyItem.vue';
 import PasskeyRegister from '@/components/PasskeyRegister.vue';
 import { destroy } from '@/actions/Laravel/Passkeys/Http/Controllers/PasskeyRegistrationController';
@@ -31,8 +31,7 @@ const handleRegisterSuccess = () => {
 
 <template>
     <div v-if="canManagePasskeys" class="space-y-6">
-        <Heading
-            variant="small"
+        <SectionHeading
             title="Clés d'accès"
             description="Gérez vos clés d'accès pour vous connecter sans mot de passe"
         />

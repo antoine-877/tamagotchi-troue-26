@@ -6,9 +6,12 @@ import CropMarks from '@/components/CropMarks.vue';
 import FilmStrip from '@/components/FilmStrip.vue';
 import GaugeCard from '@/components/GaugeCard.vue';
 import LcdScreen from '@/components/LcdScreen.vue';
+import PageMasthead from '@/components/PageMasthead.vue';
 import PixelIcon from '@/components/PixelIcon.vue';
+import SectionHeading from '@/components/SectionHeading.vue';
 import SpeciesPicker from '@/components/SpeciesPicker.vue';
 import TamagotchiDevice from '@/components/TamagotchiDevice.vue';
+import TextLink from '@/components/TextLink.vue';
 import { Button } from '@/components/ui/button';
 import { moodOf, reactionOf } from '@/lib/mood';
 import { gauges, species } from '@/lib/species';
@@ -58,8 +61,6 @@ function press(action) {
 const mood = computed(() => {
     return reaction.value ? reactionOf(reaction.value, pet) : moodOf(pet);
 });
-
-const tones = { lilac: 'bg-lilac', acid: 'bg-acid', aqua: 'bg-aqua' };
 
 // Like a real pet, the gauges slowly go down.
 let decayTimer = null;
@@ -126,9 +127,6 @@ const sections = [
         text: 'Grimpez au classement des créatures les plus heureuses et dépensez votre solde au magasin.',
     },
 ];
-
-const link =
-    'inline-flex min-h-11 items-center font-extrabold underline decoration-2 underline-offset-4 hover:decoration-4';
 </script>
 
 <template>
@@ -149,9 +147,7 @@ const link =
                         <Link :href="dashboard()">Mon tamagotchi</Link>
                     </Button>
                     <template v-else>
-                        <Link :href="login()" :class="[link, 'text-link']">
-                            Se connecter
-                        </Link>
+                        <TextLink :href="login()">Se connecter</TextLink>
                         <Button as-child>
                             <Link :href="register()">Créer un compte</Link>
                         </Button>
@@ -161,138 +157,126 @@ const link =
         </header>
 
         <main id="contenu" class="flex-1">
-            <section
+            <PageMasthead
                 aria-labelledby="cover-title"
-                class="@container relative overflow-hidden px-4 pt-5 pb-10 text-ink transition-colors duration-500 [--ring:var(--color-night)] motion-reduce:transition-none sm:px-8"
-                :class="tones[mood.tone]"
+                :tone="mood.tone"
+                kicker="Jeu d'élevage en pixels"
+                :aside="`Démo · Humeur : ${mood.word}`"
             >
-                <CropMarks />
-
-                <div class="mx-auto max-w-[1216px]">
+                <div
+                    class="flex flex-col gap-8 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-4"
+                >
                     <div
-                        class="mb-5 flex flex-wrap justify-between gap-x-6 gap-y-1 border-b-2 border-ink pb-2"
+                        class="flex flex-col gap-5 lg:col-span-7 lg:row-start-1"
                     >
-                        <span class="kicker">Jeu d'élevage en pixels</span>
-                        <span class="kicker"
-                            >Démo · Humeur : {{ mood.word }}</span
+                        <h1
+                            id="cover-title"
+                            class="cover-title pixel-title uppercase"
                         >
-                    </div>
-
-                    <div
-                        class="flex flex-col gap-8 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-4"
-                    >
+                            Élevez <br />des bêtes <br />en pixels
+                        </h1>
+                        <p
+                            class="max-w-[34rem] text-[clamp(1.25rem,2.4vw,1.5rem)] leading-snug font-extrabold text-balance"
+                        >
+                            Un tamagotchi en ligne : adoptez des créatures,
+                            nourrissez-les, faites-les jouer et rendez visite à
+                            celles des autres joueurs.
+                        </p>
                         <div
-                            class="flex flex-col gap-5 lg:col-span-7 lg:row-start-1"
+                            v-if="!$page.props.auth.user"
+                            class="flex flex-wrap items-center gap-x-6 gap-y-3"
                         >
-                            <h1
-                                id="cover-title"
-                                class="cover-title pixel-title uppercase"
-                            >
-                                Élevez <br />des bêtes <br />en pixels
-                            </h1>
-                            <p
-                                class="max-w-[34rem] text-[clamp(1.25rem,2.4vw,1.5rem)] leading-snug font-extrabold text-balance"
-                            >
-                                Un tamagotchi en ligne : adoptez des créatures,
-                                nourrissez-les, faites-les jouer et rendez
-                                visite à celles des autres joueurs.
-                            </p>
-                            <div
-                                v-if="!$page.props.auth.user"
-                                class="flex flex-wrap items-center gap-x-6 gap-y-3"
-                            >
-                                <Button
-                                    as-child
-                                    size="lg"
-                                    class="bg-paper text-ink [--border:var(--color-ink)]"
-                                >
-                                    <Link :href="register()">
-                                        Adopter ma première créature
-                                    </Link>
-                                </Button>
-                                <Link :href="login()" :class="link">
-                                    J'ai déjà un compte
-                                </Link>
-                            </div>
                             <Button
-                                v-else
                                 as-child
                                 size="lg"
-                                class="self-start bg-paper text-ink [--border:var(--color-ink)]"
+                                class="bg-paper text-ink [--border:var(--color-ink)]"
                             >
-                                <Link :href="dashboard()">
-                                    Retrouver mes créatures
+                                <Link :href="register()">
+                                    Adopter ma première créature
                                 </Link>
                             </Button>
+                            <TextLink :href="login()" plain>
+                                J'ai déjà un compte
+                            </TextLink>
                         </div>
+                        <Button
+                            v-else
+                            as-child
+                            size="lg"
+                            class="self-start bg-paper text-ink [--border:var(--color-ink)]"
+                        >
+                            <Link :href="dashboard()">
+                                Retrouver mes créatures
+                            </Link>
+                        </Button>
+                    </div>
+
+                    <div
+                        ref="device"
+                        class="flex flex-col items-center gap-7 lg:col-span-5 lg:row-span-2 lg:row-start-1"
+                    >
+                        <TamagotchiDevice
+                            :creature="creature"
+                            :state="mood.state"
+                        >
+                            <button
+                                type="button"
+                                class="device-key"
+                                @click="press('feed')"
+                            >
+                                Nourrir
+                            </button>
+                            <button
+                                type="button"
+                                class="device-key"
+                                @click="press('play')"
+                            >
+                                Jouer
+                            </button>
+                            <button
+                                type="button"
+                                class="device-key"
+                                @click="press('sleep')"
+                            >
+                                Dodo
+                            </button>
+                        </TamagotchiDevice>
 
                         <div
-                            ref="device"
-                            class="flex flex-col items-center gap-7 lg:col-span-5 lg:row-span-2 lg:row-start-1"
+                            role="group"
+                            aria-labelledby="picker-label"
+                            class="flex flex-col items-center gap-2"
                         >
-                            <TamagotchiDevice
-                                :creature="creature"
-                                :state="mood.state"
-                            >
-                                <button
-                                    type="button"
-                                    class="device-key"
-                                    @click="press('feed')"
-                                >
-                                    Nourrir
-                                </button>
-                                <button
-                                    type="button"
-                                    class="device-key"
-                                    @click="press('play')"
-                                >
-                                    Jouer
-                                </button>
-                                <button
-                                    type="button"
-                                    class="device-key"
-                                    @click="press('sleep')"
-                                >
-                                    Dodo
-                                </button>
-                            </TamagotchiDevice>
-
-                            <div
-                                role="group"
-                                aria-labelledby="picker-label"
-                                class="flex flex-col items-center gap-2"
-                            >
-                                <span id="picker-label" class="kicker">
-                                    Changer d'espèce
-                                </span>
-                                <SpeciesPicker v-model="pet.species" />
-                            </div>
-                        </div>
-
-                        <div
-                            class="flex flex-col gap-3 lg:col-span-7 lg:row-start-2"
-                        >
-                            <p
-                                class="border-t-2 border-ink pt-3 text-[clamp(1.25rem,2.4vw,1.5rem)] leading-tight font-extrabold text-balance"
-                            >
-                                {{ mood.headline }}
-                            </p>
-                            <div class="grid gap-3 min-[480px]:grid-cols-3">
-                                <GaugeCard
-                                    v-for="(label, gauge) in gauges"
-                                    :key="gauge"
-                                    :gauge="gauge"
-                                    :value="pet[gauge]"
-                                />
-                            </div>
-                            <p class="text-pretty">
-                                Essayez les touches du boîtier. Ici, rien n'est
-                                enregistré : c'est une démonstration.
-                            </p>
+                            <span id="picker-label" class="kicker">
+                                Changer d'espèce
+                            </span>
+                            <SpeciesPicker v-model="pet.species" />
                         </div>
                     </div>
+
+                    <div
+                        class="flex flex-col gap-3 lg:col-span-7 lg:row-start-2"
+                    >
+                        <p
+                            class="border-t-2 border-ink pt-3 text-[clamp(1.25rem,2.4vw,1.5rem)] leading-tight font-extrabold text-balance"
+                        >
+                            {{ mood.headline }}
+                        </p>
+                        <div class="grid gap-3 min-[480px]:grid-cols-3">
+                            <GaugeCard
+                                v-for="(label, gauge) in gauges"
+                                :key="gauge"
+                                :gauge="gauge"
+                                :value="pet[gauge]"
+                            />
+                        </div>
+                        <p class="text-pretty">
+                            Essayez les touches du boîtier. Ici, rien n'est
+                            enregistré : c'est une démonstration.
+                        </p>
+                    </div>
                 </div>
-            </section>
+            </PageMasthead>
 
             <div class="bg-ink text-paper dark:border-y-2 dark:border-paper">
                 <p
@@ -308,20 +292,18 @@ const link =
                 aria-labelledby="species-title"
                 class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 pt-9 sm:px-8"
             >
-                <div
-                    class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b-2 border-border pb-2"
+                <SectionHeading
+                    id="species-title"
+                    title="Cinq espèces à adopter"
                 >
-                    <h2 id="species-title" class="pixel-title text-[30px]">
-                        Cinq espèces à adopter
-                    </h2>
                     <p class="kicker text-muted-foreground">
                         Touchez une image pour la mettre dans le boîtier
                     </p>
-                </div>
+                </SectionHeading>
                 <FilmStrip
                     :creatures="showcase"
                     :active-id="creature.id"
-                    aria-label="Choisir l'espèce de la créature de démonstration"
+                    label="Choisir l'espèce de la créature de démonstration"
                     @select="pickFromFilm"
                 />
             </section>
@@ -404,12 +386,8 @@ const link =
             >
                 <p class="kicker">Tamagotchi · un jeu d'élevage en pixels</p>
                 <p v-if="!$page.props.auth.user" class="flex gap-x-5">
-                    <Link :href="login()" :class="[link, 'text-link']">
-                        Se connecter
-                    </Link>
-                    <Link :href="register()" :class="[link, 'text-link']">
-                        Créer un compte
-                    </Link>
+                    <TextLink :href="login()">Se connecter</TextLink>
+                    <TextLink :href="register()">Créer un compte</TextLink>
                 </p>
             </div>
         </footer>

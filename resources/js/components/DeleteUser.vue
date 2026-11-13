@@ -2,7 +2,7 @@
 import { Form } from '@inertiajs/vue3';
 import { useTemplateRef } from 'vue';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
-import Heading from '@/components/Heading.vue';
+import SectionHeading from '@/components/SectionHeading.vue';
 import InputError from '@/components/InputError.vue';
 import PasswordInput from '@/components/PasswordInput.vue';
 import { Button } from '@/components/ui/button';
@@ -23,8 +23,7 @@ const passwordInput = useTemplateRef('passwordInput');
 
 <template>
     <div class="space-y-6">
-        <Heading
-            variant="small"
+        <SectionHeading
             title="Supprimer le compte"
             description="Supprimez votre compte et toutes ses données"
         />

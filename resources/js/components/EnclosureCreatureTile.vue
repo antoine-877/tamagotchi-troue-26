@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import CreatureSprite from '@/components/CreatureSprite.vue';
 import LcdScreen from '@/components/LcdScreen.vue';
 import PixelIcon from '@/components/PixelIcon.vue';
+import { frameNumber } from '@/lib/format';
 import { isLow, moodOf } from '@/lib/mood';
 import { gauges, species } from '@/lib/species';
 
@@ -16,7 +17,6 @@ const mood = computed(() => moodOf(props.creature));
 const speciesLabel = computed(
     () => species[props.creature.species]?.label ?? 'Créature',
 );
-const number = computed(() => String(props.creature.id).padStart(3, '0'));
 </script>
 
 <template>
@@ -30,7 +30,7 @@ const number = computed(() => String(props.creature.id).padStart(3, '0'));
             <span
                 class="absolute top-1.5 left-2 font-mono text-[11px] font-bold"
             >
-                N° {{ number }}
+                N° {{ frameNumber(creature.id) }}
             </span>
             <CreatureSprite
                 :species="creature.species"

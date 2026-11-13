@@ -2,7 +2,7 @@
 import { Form } from '@inertiajs/vue3';
 import { ShieldCheck } from '@lucide/vue';
 import { onUnmounted, ref } from 'vue';
-import Heading from '@/components/Heading.vue';
+import SectionHeading from '@/components/SectionHeading.vue';
 import TwoFactorRecoveryCodes from '@/components/TwoFactorRecoveryCodes.vue';
 import TwoFactorSetupModal from '@/components/TwoFactorSetupModal.vue';
 import { Button } from '@/components/ui/button';
@@ -29,8 +29,7 @@ onUnmounted(() => clearTwoFactorAuthData());
 
 <template>
     <div v-if="canManageTwoFactor" class="space-y-6">
-        <Heading
-            variant="small"
+        <SectionHeading
             title="Double authentification"
             description="Gérez les réglages de votre double authentification"
         />

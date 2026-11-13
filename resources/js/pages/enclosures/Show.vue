@@ -1,15 +1,19 @@
 <script setup>
-import { Form, Head, Link } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { Form, Head } from '@inertiajs/vue3';
 import EnclosureController from '@/actions/App/Http/Controllers/EnclosureController';
 import MessageController from '@/actions/App/Http/Controllers/MessageController';
 import EnclosureCreatureTile from '@/components/EnclosureCreatureTile.vue';
+import FitTitle from '@/components/FitTitle.vue';
 import InputError from '@/components/InputError.vue';
 import LcdScreen from '@/components/LcdScreen.vue';
+import PageMasthead from '@/components/PageMasthead.vue';
 import PixelIcon from '@/components/PixelIcon.vue';
+import SectionHeading from '@/components/SectionHeading.vue';
+import TextLink from '@/components/TextLink.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { frameNumber } from '@/lib/format';
 import { create } from '@/routes/creatures';
 
 defineOptions({
@@ -19,14 +23,12 @@ defineOptions({
     },
 });
 
-const props = defineProps({
+defineProps({
     owner: Object,
     isOwner: Boolean,
     creatures: Array,
     messages: Array,
 });
-
-const number = computed(() => String(props.owner.id).padStart(3, '0'));
 
 const count = (n, one, many) => `${n} ${n > 1 ? many : one}`;
 </script>
@@ -35,80 +37,59 @@ const count = (n, one, many) => `${n} ${n > 1 ? many : one}`;
     <Head :title="`Enclos de ${owner.name}`" />
 
     <!-- Left page: the owner, as a magazine cover. -->
-    <section
+    <PageMasthead
         aria-labelledby="owner-title"
-        class="@container bg-lilac px-4 pt-5 pb-9 text-ink [--ring:var(--color-night)] sm:px-8"
+        :kicker="`Enclos n° ${frameNumber(owner.id)}`"
+        :aside="`${count(creatures.length, 'créature', 'créatures')} · ${count(messages.length, 'message', 'messages')}`"
     >
-        <div class="mx-auto max-w-[1216px]">
-            <div
-                class="mb-4 flex flex-wrap justify-between gap-x-6 gap-y-1 border-b-2 border-ink pb-2"
-            >
-                <span class="kicker">Enclos n° {{ number }}</span>
-                <span class="kicker">
-                    {{ count(creatures.length, 'créature', 'créatures') }} ·
-                    {{ count(messages.length, 'message', 'messages') }}
-                </span>
-            </div>
+        <div
+            class="flex flex-col gap-6 lg:grid lg:grid-cols-12 lg:items-end lg:gap-x-6"
+        >
+            <div class="flex min-w-0 flex-col gap-5 lg:col-span-8">
+                <FitTitle id="owner-title" :text="owner.name" />
 
-            <div
-                class="flex flex-col gap-6 lg:grid lg:grid-cols-12 lg:items-end lg:gap-x-6"
-            >
-                <div class="flex min-w-0 flex-col gap-5 lg:col-span-8">
-                    <h1
-                        id="owner-title"
-                        class="owner-name pixel-title uppercase"
-                        :style="{ '--chars': owner.name.length }"
-                    >
-                        {{ owner.name }}
-                    </h1>
-
-                    <figure
-                        v-if="owner.motto"
-                        class="relative max-w-[640px] border-l-8 border-ink pl-5"
-                    >
-                        <blockquote
-                            class="text-[clamp(1.5rem,3.4vw,2.25rem)] leading-tight font-extrabold text-balance [overflow-wrap:anywhere]"
-                        >
-                            «&nbsp;{{ owner.motto }}&nbsp;»
-                        </blockquote>
-                        <figcaption class="mt-2 kicker">
-                            La devise de {{ owner.name }}
-                        </figcaption>
-                    </figure>
-                    <p v-else class="kicker">
-                        {{
-                            isOwner
-                                ? 'Pas encore de devise. Choisissez-en une.'
-                                : 'Pas de devise affichée.'
-                        }}
-                    </p>
-                </div>
-
-                <Form
-                    v-if="isOwner"
-                    v-bind="EnclosureController.update.form()"
-                    v-slot="{ errors, processing }"
-                    class="flex flex-col gap-3 border-4 border-ink bg-paper p-4 shadow-[8px_8px_0_0_var(--color-ink)] [--border:var(--color-ink)] [--input:var(--color-ink)] lg:col-span-4"
+                <figure
+                    v-if="owner.motto"
+                    class="relative max-w-[640px] border-l-8 border-ink pl-5"
                 >
-                    <Label for="motto" class="kicker">Ma devise</Label>
-                    <Input
-                        id="motto"
-                        name="motto"
-                        :default-value="owner.motto ?? ''"
-                        class="border-ink bg-paper text-ink"
-                    />
-                    <InputError :message="errors.motto" />
-                    <Button
-                        type="submit"
-                        :disabled="processing"
-                        class="self-start"
+                    <blockquote
+                        class="text-[clamp(1.5rem,3.4vw,2.25rem)] leading-tight font-extrabold text-balance [overflow-wrap:anywhere]"
                     >
-                        Enregistrer
-                    </Button>
-                </Form>
+                        «&nbsp;{{ owner.motto }}&nbsp;»
+                    </blockquote>
+                    <figcaption class="mt-2 kicker">
+                        La devise de {{ owner.name }}
+                    </figcaption>
+                </figure>
+                <p v-else class="kicker">
+                    {{
+                        isOwner
+                            ? 'Pas encore de devise. Choisissez-en une.'
+                            : 'Pas de devise affichée.'
+                    }}
+                </p>
             </div>
+
+            <Form
+                v-if="isOwner"
+                v-bind="EnclosureController.update.form()"
+                v-slot="{ errors, processing }"
+                class="flex flex-col gap-3 border-4 border-ink bg-paper p-4 shadow-hard-lg [--input:var(--color-ink)] lg:col-span-4"
+            >
+                <Label for="motto" class="kicker">Ma devise</Label>
+                <Input
+                    id="motto"
+                    name="motto"
+                    :default-value="owner.motto ?? ''"
+                    class="border-ink bg-paper text-ink"
+                />
+                <InputError :message="errors.motto" />
+                <Button type="submit" :disabled="processing" class="self-start">
+                    Enregistrer
+                </Button>
+            </Form>
         </div>
-    </section>
+    </PageMasthead>
 
     <!-- Right page: the residents, then the guestbook. -->
     <div
@@ -118,12 +99,11 @@ const count = (n, one, many) => `${n} ${n > 1 ? many : one}`;
             aria-labelledby="residents-title"
             class="flex min-w-0 flex-col gap-4 lg:col-span-7"
         >
-            <div class="border-b-2 border-border pb-1.5">
-                <p class="kicker text-muted-foreground">01 · Pensionnaires</p>
-                <h2 id="residents-title" class="pixel-title text-[32px]">
-                    Ses créatures
-                </h2>
-            </div>
+            <SectionHeading
+                id="residents-title"
+                kicker="01 · Pensionnaires"
+                :title="isOwner ? 'Mes créatures' : 'Ses créatures'"
+            />
 
             <ul
                 v-if="creatures.length"
@@ -154,13 +134,13 @@ const count = (n, one, many) => `${n} ${n > 1 ? many : one}`;
                 <div class="grid gap-2">
                     <p class="pixel-title text-[28px]">Cet enclos est vide.</p>
                     <p>Aucune créature n'habite ici pour l'instant.</p>
-                    <Link
+                    <TextLink
                         v-if="isOwner"
                         :href="create()"
-                        class="inline-flex min-h-11 items-center self-start font-extrabold text-link underline decoration-2 underline-offset-4"
+                        class="self-start"
                     >
                         Adopter une créature
-                    </Link>
+                    </TextLink>
                 </div>
             </div>
         </section>
@@ -169,17 +149,13 @@ const count = (n, one, many) => `${n} ${n > 1 ? many : one}`;
             aria-labelledby="guestbook-title"
             class="flex min-w-0 flex-col gap-4 lg:col-span-5"
         >
-            <div
-                class="flex items-end justify-between gap-4 border-b-2 border-border pb-1.5"
+            <SectionHeading
+                id="guestbook-title"
+                kicker="02 · Courrier"
+                title="Livre d'or"
             >
-                <div>
-                    <p class="kicker text-muted-foreground">02 · Courrier</p>
-                    <h2 id="guestbook-title" class="pixel-title text-[32px]">
-                        Livre d'or
-                    </h2>
-                </div>
                 <PixelIcon name="note" class="mb-1 size-8 shrink-0" />
-            </div>
+            </SectionHeading>
 
             <ol v-if="messages.length" class="flex flex-col">
                 <li
@@ -240,12 +216,6 @@ const count = (n, one, many) => `${n} ${n > 1 ? many : one}`;
 </template>
 
 <style scoped>
-/* The giant name: as big as the cover allows, never wider than it. */
-.owner-name {
-    font-size: clamp(2rem, min(20cqi, 140cqi / var(--chars)), 11rem);
-    overflow-wrap: anywhere;
-}
-
 /* Visitors write free HTML here: keep it inside the column. */
 .message-body {
     min-width: 0;

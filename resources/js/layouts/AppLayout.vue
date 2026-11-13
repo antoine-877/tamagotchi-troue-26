@@ -33,13 +33,13 @@ const { breadcrumbs = [], bleed = false } = defineProps<{
                 <li
                     v-for="(item, index) in breadcrumbs"
                     :key="index"
-                    class="flex gap-x-2"
+                    class="flex items-center gap-x-2"
                 >
                     <span v-if="index > 0" aria-hidden="true">/</span>
                     <Link
                         v-if="index < breadcrumbs.length - 1"
                         :href="item.href"
-                        class="underline-offset-4 hover:text-foreground hover:underline"
+                        class="inline-flex min-h-6 items-center underline-offset-4 hover:text-foreground hover:underline"
                         >{{ item.title }}</Link
                     >
                     <span v-else aria-current="page" class="text-foreground">{{

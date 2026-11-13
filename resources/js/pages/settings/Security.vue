@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Form, Head } from '@inertiajs/vue3';
 import SecurityController from '@/actions/App/Http/Controllers/Settings/SecurityController';
-import Heading from '@/components/Heading.vue';
+import SectionHeading from '@/components/SectionHeading.vue';
 import InputError from '@/components/InputError.vue';
 import PasswordInput from '@/components/PasswordInput.vue';
 import { Button } from '@/components/ui/button';
@@ -28,6 +28,7 @@ defineOptions({
                 href: edit(),
             },
         ],
+        bleed: true,
     },
 });
 </script>
@@ -35,11 +36,8 @@ defineOptions({
 <template>
     <Head title="Réglages de la sécurité" />
 
-    <h1 class="sr-only">Réglages de la sécurité</h1>
-
     <div class="space-y-6">
-        <Heading
-            variant="small"
+        <SectionHeading
             title="Modifier le mot de passe"
             description="Choisissez un mot de passe long et aléatoire pour protéger votre compte"
         />

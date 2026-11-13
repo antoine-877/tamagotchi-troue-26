@@ -40,8 +40,10 @@ defineProps<{
             Renvoyer l'e-mail de vérification
         </Button>
 
-        <TextLink :href="logout()" as="button" class="mx-auto block text-sm">
-            Se déconnecter
-        </TextLink>
+        <p>
+            <TextLink :href="logout()" as="button" class="text-sm">
+                Se déconnecter
+            </TextLink>
+        </p>
     </Form>
 </template>

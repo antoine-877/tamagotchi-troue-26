@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
+import PageMasthead from '@/components/PageMasthead.vue';
 import { useCurrentUrl } from '@/composables/useCurrentUrl';
+import { twoDigits } from '@/lib/format';
 import { toUrl } from '@/lib/utils';
 import { edit as editAppearance } from '@/routes/appearance';
 import { edit as editProfile } from '@/routes/profile';
@@ -23,22 +25,22 @@ const sidebarNavItems: NavItem[] = [
 ];
 
 const { isCurrentOrParentUrl } = useCurrentUrl();
-
-const number = (index: number) => String(index + 1).padStart(2, '0');
 </script>
 
 <template>
-    <div class="px-4 py-6 sm:px-4">
-        <header class="mb-8 border-b-4 border-border pb-4">
-            <p class="kicker">Votre compte</p>
-            <h2 class="mt-2 pixel-title text-[clamp(3rem,10vw,6rem)] uppercase">
-                Réglages
-            </h2>
-            <p class="mt-3 text-[17px]">
-                Gérez votre profil et les réglages de votre compte
-            </p>
-        </header>
+    <PageMasthead aria-labelledby="settings-title" kicker="Votre compte">
+        <h1
+            id="settings-title"
+            class="pixel-title text-[clamp(3rem,10vw,6rem)] uppercase"
+        >
+            Réglages
+        </h1>
+        <p class="mt-3 max-w-[520px] text-lg text-pretty">
+            Gérez votre profil et les réglages de votre compte
+        </p>
+    </PageMasthead>
 
+    <div class="mx-auto w-full max-w-[1280px] px-4 pt-8 pb-14 sm:px-8">
         <div class="flex flex-col gap-10 lg:flex-row lg:gap-14">
             <aside class="w-full lg:w-56 lg:shrink-0">
                 <nav aria-label="Réglages">
@@ -65,7 +67,7 @@ const number = (index: number) => String(index + 1).padStart(2, '0');
                                 "
                             >
                                 <span class="font-mono text-[13px]">{{
-                                    number(index)
+                                    twoDigits(index + 1)
                                 }}</span>
                                 {{ item.title }}
                             </Link>

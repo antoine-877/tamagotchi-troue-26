@@ -4,10 +4,13 @@ import PurchaseController from '@/actions/App/Http/Controllers/PurchaseControlle
 import ShopController from '@/actions/App/Http/Controllers/ShopController';
 import GiftCodeTicket from '@/components/GiftCodeTicket.vue';
 import InputError from '@/components/InputError.vue';
+import PageMasthead from '@/components/PageMasthead.vue';
 import PixelIcon from '@/components/PixelIcon.vue';
 import ShopItemScreen from '@/components/ShopItemScreen.vue';
+import TextLink from '@/components/TextLink.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { twoDigits } from '@/lib/format';
 import { gauges } from '@/lib/species';
 import { create } from '@/routes/creatures';
 import { index } from '@/routes/shop';
@@ -25,8 +28,6 @@ defineProps({
     creatures: Array,
 });
 
-const adNumber = (position) => String(position + 1).padStart(2, '0');
-
 const fieldClass =
     'h-11 w-full min-w-0 border-2 border-input bg-background px-3 text-base font-bold';
 </script>
@@ -34,57 +35,49 @@ const fieldClass =
 <template>
     <Head title="Magasin" />
 
-    <section
+    <PageMasthead
         aria-labelledby="shop-title"
-        class="bg-lilac px-4 pt-5 pb-8 text-ink [--border:var(--color-ink)] [--ring:var(--color-night)] sm:px-8"
+        kicker="Rubrique 04 · Petites annonces"
+        aside="Livraison immédiate dans l'enclos"
     >
-        <div class="mx-auto max-w-[1216px]">
-            <div
-                class="mb-4 flex flex-wrap justify-between gap-x-6 gap-y-1 border-b-2 border-ink pb-2"
-            >
-                <span class="kicker">Rubrique 04 · Petites annonces</span>
-                <span class="kicker">Livraison immédiate dans l'enclos</span>
-            </div>
-
-            <div
-                class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between"
-            >
-                <div class="flex flex-col gap-3">
-                    <h1
-                        id="shop-title"
-                        class="pixel-title text-[clamp(3.5rem,11vw,8rem)] uppercase"
-                    >
-                        Magasin
-                    </h1>
-                    <p class="max-w-[460px] text-lg text-pretty">
-                        Nourriture, jouets et repos&nbsp;: choisissez l'article,
-                        la créature qui le reçoit, et c'est réglé.
-                    </p>
-                </div>
-
-                <Form
-                    v-bind="ShopController.index.form()"
-                    role="search"
-                    class="flex w-full flex-col gap-1.5 lg:max-w-[440px]"
+        <div
+            class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between"
+        >
+            <div class="flex flex-col gap-3">
+                <h1
+                    id="shop-title"
+                    class="pixel-title text-[clamp(3.5rem,11vw,8rem)] uppercase"
                 >
-                    <label for="q" class="kicker">Chercher un article</label>
-                    <div class="flex gap-2">
-                        <Input
-                            id="q"
-                            name="q"
-                            type="search"
-                            :default-value="search"
-                            placeholder="Bonbon, coussin…"
-                            class="border-ink bg-paper text-ink placeholder:text-ink/55"
-                        />
-                        <Button type="submit" class="bg-ink text-paper">
-                            Chercher
-                        </Button>
-                    </div>
-                </Form>
+                    Magasin
+                </h1>
+                <p class="max-w-[460px] text-lg text-pretty">
+                    Nourriture, jouets et repos&nbsp;: choisissez l'article, la
+                    créature qui le reçoit, et c'est réglé.
+                </p>
             </div>
+
+            <Form
+                v-bind="ShopController.index.form()"
+                role="search"
+                class="flex w-full flex-col gap-1.5 lg:max-w-[440px]"
+            >
+                <label for="q" class="kicker">Chercher un article</label>
+                <div class="flex gap-2">
+                    <Input
+                        id="q"
+                        name="q"
+                        type="search"
+                        :default-value="search"
+                        placeholder="Bonbon, coussin…"
+                        class="border-ink bg-paper text-ink placeholder:text-ink/55"
+                    />
+                    <Button type="submit" class="bg-ink text-paper">
+                        Chercher
+                    </Button>
+                </div>
+            </Form>
         </div>
-    </section>
+    </PageMasthead>
 
     <div class="bg-ink text-paper dark:border-y-2 dark:border-paper">
         <p
@@ -99,7 +92,7 @@ const fieldClass =
             <Link
                 v-if="search"
                 :href="index()"
-                class="font-bold text-acid underline decoration-2 underline-offset-4"
+                class="inline-flex min-h-6 items-center font-bold text-acid underline decoration-2 underline-offset-4"
             >
                 Tout le catalogue
             </Link>
@@ -129,12 +122,9 @@ const fieldClass =
                 >
                     Aucun article ne correspond à « {{ search }} ».
                 </p>
-                <Link
-                    :href="index()"
-                    class="inline-flex min-h-11 items-center self-start font-extrabold text-link underline decoration-2 underline-offset-4"
-                >
+                <TextLink :href="index()" class="self-start">
                     Voir tout le catalogue
-                </Link>
+                </TextLink>
             </div>
         </div>
 
@@ -147,12 +137,7 @@ const fieldClass =
                 Les articles se donnent à une créature, et vous n'en avez pas
                 encore.
             </span>
-            <Link
-                :href="create()"
-                class="inline-flex min-h-11 items-center font-extrabold text-link underline decoration-2 underline-offset-4"
-            >
-                Adopter une créature
-            </Link>
+            <TextLink :href="create()">Adopter une créature</TextLink>
         </p>
 
         <ul
@@ -189,7 +174,7 @@ const fieldClass =
 
                     <div class="flex flex-1 flex-col gap-2 px-4 pb-4">
                         <p class="kicker text-muted-foreground">
-                            Annonce n° {{ adNumber(position) }}
+                            Annonce n° {{ twoDigits(position + 1) }}
                         </p>
                         <h2
                             :id="`item-${item.id}`"

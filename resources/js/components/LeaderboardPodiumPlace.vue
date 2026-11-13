@@ -1,8 +1,8 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import CreatureSprite from '@/components/CreatureSprite.vue';
 import LcdScreen from '@/components/LcdScreen.vue';
+import TextLink from '@/components/TextLink.vue';
 import { moodOf } from '@/lib/mood';
 import { species } from '@/lib/species';
 import { show } from '@/routes/enclosures';
@@ -65,12 +65,13 @@ const speciesLabel = computed(
                 </h3>
                 <p class="kicker">
                     {{ speciesLabel }} · chez
-                    <Link
+                    <TextLink
                         :href="show(creature.user.id)"
-                        class="inline-flex min-h-11 items-center [overflow-wrap:anywhere] underline decoration-2 underline-offset-4 hover:decoration-4"
+                        plain
+                        class="[overflow-wrap:anywhere]"
                     >
                         {{ creature.user.name }}
-                    </Link>
+                    </TextLink>
                 </p>
             </div>
 

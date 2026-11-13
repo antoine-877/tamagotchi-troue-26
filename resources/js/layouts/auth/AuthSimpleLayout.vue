@@ -3,8 +3,8 @@ import { Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import CreatureSprite from '@/components/CreatureSprite.vue';
-import CropMarks from '@/components/CropMarks.vue';
 import LcdScreen from '@/components/LcdScreen.vue';
+import PageMasthead from '@/components/PageMasthead.vue';
 import { species } from '@/lib/species';
 import { home } from '@/routes';
 
@@ -22,23 +22,17 @@ const watcher = computed(() => {
 </script>
 
 <template>
-    <div
-        class="relative flex min-h-svh flex-col bg-lilac px-4 pt-3 pb-12 text-ink [--ring:var(--color-night)] sm:px-8"
-    >
-        <CropMarks />
-
-        <header
-            class="mx-auto flex w-full max-w-[1100px] flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b-2 border-ink pb-2"
-        >
+    <PageMasthead class="flex min-h-svh flex-col">
+        <template #bar>
             <Link :href="home()" class="-my-1 py-1">
                 <AppLogo />
                 <span class="sr-only">, retour à l'accueil</span>
             </Link>
             <span class="kicker max-sm:hidden">Espace joueur</span>
-        </header>
+        </template>
 
         <div
-            class="mx-auto mt-8 grid w-full max-w-[1100px] flex-1 content-start items-center gap-8 lg:mt-0 lg:grid-cols-[1fr_minmax(0,460px)] lg:content-center lg:gap-16"
+            class="mt-3 grid w-full flex-1 content-start items-center gap-8 lg:mt-0 lg:grid-cols-[1fr_minmax(0,460px)] lg:content-center lg:gap-16"
         >
             <div class="flex flex-col gap-4">
                 <div class="flex items-center gap-4 lg:flex-col lg:items-start">
@@ -71,10 +65,10 @@ const watcher = computed(() => {
             </div>
 
             <div
-                class="min-w-0 border-4 border-ink bg-card p-5 text-card-foreground shadow-[8px_8px_0_0_var(--color-ink)] [--ring:var(--color-night)] sm:p-8 dark:[--ring:var(--color-acid)]"
+                class="min-w-0 border-4 border-ink bg-card p-5 text-card-foreground shadow-[8px_8px_0_0_var(--color-ink)] [--ring:var(--color-night)] sm:p-8 dark:[--border:var(--color-paper)] dark:[--ring:var(--color-acid)]"
             >
                 <slot />
             </div>
         </div>
-    </div>
+    </PageMasthead>
 </template>

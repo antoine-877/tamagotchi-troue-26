@@ -16,7 +16,7 @@ const low = computed(() => isLow(props.gauge, props.value));
 
 <template>
     <div
-        class="@container flex min-w-0 flex-col gap-1.5 border-4 border-ink px-3.5 pt-3 pb-3.5 text-ink transition-colors duration-500 motion-reduce:transition-none"
+        class="@container flex min-w-0 flex-col gap-1.5 border-4 border-ink px-3.5 pt-3 pb-3.5 text-ink transition-colors duration-300 ease-[steps(3,end)] motion-reduce:transition-none"
         :class="low ? 'bg-rose' : 'bg-paper'"
     >
         <div class="flex items-center justify-between gap-2">

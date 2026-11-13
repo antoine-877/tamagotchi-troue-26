@@ -1,8 +1,10 @@
 <script setup>
 import { Form, Head } from '@inertiajs/vue3';
 import CreatureController from '@/actions/App/Http/Controllers/CreatureController';
+import FitTitle from '@/components/FitTitle.vue';
 import GaugeCard from '@/components/GaugeCard.vue';
 import InputError from '@/components/InputError.vue';
+import PageMasthead from '@/components/PageMasthead.vue';
 import TamagotchiDevice from '@/components/TamagotchiDevice.vue';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,6 +20,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
+import { frameNumber } from '@/lib/format';
 import { moodOf } from '@/lib/mood';
 import { gauges, species } from '@/lib/species';
 import { dashboard } from '@/routes';
@@ -25,7 +28,7 @@ import { dashboard } from '@/routes';
 defineOptions({
     layout: {
         breadcrumbs: [
-            { title: 'Mes créatures', href: dashboard() },
+            { title: 'Mon tamagotchi', href: dashboard() },
             { title: 'Modifier', href: '#' },
         ],
         bleed: true,
@@ -40,23 +43,21 @@ defineProps({
 <template>
     <Head :title="`Modifier ${creature.name}`" />
 
+    <PageMasthead
+        aria-labelledby="creature-title"
+        :kicker="`Fiche n° ${frameNumber(creature.id)} · ${species[creature.species]?.label ?? 'Créature'}`"
+        :aside="`Humeur : ${moodOf(creature).word}`"
+    >
+        <FitTitle id="creature-title" :text="creature.name" />
+    </PageMasthead>
+
     <div
-        class="mx-auto grid w-full max-w-[1280px] gap-10 px-4 pt-6 pb-12 sm:px-8 lg:grid-cols-12 lg:gap-x-8"
+        class="mx-auto grid w-full max-w-[1280px] gap-10 px-4 pt-8 pb-14 sm:px-8 lg:grid-cols-12 lg:gap-x-8"
     >
         <section
             aria-label="La créature"
             class="flex min-w-0 flex-col items-center gap-6 lg:col-span-6"
         >
-            <p
-                class="flex flex-wrap justify-between gap-x-6 gap-y-1 self-stretch border-b-2 border-border pb-1.5 kicker"
-            >
-                <span>
-                    Fiche n° {{ String(creature.id).padStart(3, '0') }} ·
-                    {{ species[creature.species]?.label ?? 'Créature' }}
-                </span>
-                <span>Humeur : {{ moodOf(creature).word }}</span>
-            </p>
-
             <TamagotchiDevice
                 :creature="creature"
                 :state="moodOf(creature).state"
@@ -87,12 +88,6 @@ defineProps({
         </section>
 
         <div class="flex min-w-0 flex-col gap-10 lg:col-span-6">
-            <h1
-                class="pixel-title text-[clamp(2.5rem,8vw,4.5rem)] [overflow-wrap:anywhere] uppercase"
-            >
-                {{ creature.name }}
-            </h1>
-
             <Form
                 v-bind="CreatureController.update.form(creature.id)"
                 v-slot="{ errors, processing }"

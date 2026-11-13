@@ -3,6 +3,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue';
 import CreatureSprite from '@/components/CreatureSprite.vue';
 import LcdScreen from '@/components/LcdScreen.vue';
 import PixelIcon from '@/components/PixelIcon.vue';
+import { frameNumber, twoDigits } from '@/lib/format';
 import { isLow } from '@/lib/mood';
 import { gauges, species } from '@/lib/species';
 
@@ -13,10 +14,12 @@ const props = defineProps({
     state: { type: String, default: 'idle' },
 });
 
-const now = ref(new Date());
+// The clock starts in the browser, at its own time (not the server's).
+const now = ref(null);
 let timer = null;
 
 onMounted(() => {
+    now.value = new Date();
     timer = setInterval(() => {
         now.value = new Date();
     }, 10_000);
@@ -24,10 +27,8 @@ onMounted(() => {
 
 onUnmounted(() => clearInterval(timer));
 
-const two = (n) => String(n).padStart(2, '0');
-
 const caption = computed(() =>
-    props.creature ? `N° ${String(props.creature.id).padStart(3, '0')}` : 'Œuf',
+    props.creature ? `N° ${frameNumber(props.creature.id)}` : 'Œuf',
 );
 
 const spriteLabel = computed(
@@ -66,10 +67,12 @@ const spriteLabel = computed(
                         }"
                     />
                 </div>
-                <span>
-                    {{ two(now.getHours()) }}<span class="lcd-colon">:</span
-                    >{{ two(now.getMinutes()) }}
+                <span v-if="now">
+                    {{ twoDigits(now.getHours())
+                    }}<span class="lcd-colon">:</span
+                    >{{ twoDigits(now.getMinutes()) }}
                 </span>
+                <span v-else>--:--</span>
             </div>
 
             <div class="relative grid size-44 place-items-center">

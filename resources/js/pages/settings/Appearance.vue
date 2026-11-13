@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
 import AppearanceTabs from '@/components/AppearanceTabs.vue';
-import Heading from '@/components/Heading.vue';
+import SectionHeading from '@/components/SectionHeading.vue';
 import { edit } from '@/routes/appearance';
 
 defineOptions({
@@ -12,6 +12,7 @@ defineOptions({
                 href: edit(),
             },
         ],
+        bleed: true,
     },
 });
 </script>
@@ -19,11 +20,8 @@ defineOptions({
 <template>
     <Head title="Réglages de l'apparence" />
 
-    <h1 class="sr-only">Réglages de l'apparence</h1>
-
     <div class="space-y-6">
-        <Heading
-            variant="small"
+        <SectionHeading
             title="Réglages de l'apparence"
             description="Modifiez l'apparence de votre compte"
         />

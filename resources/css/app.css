@@ -287,4 +287,10 @@
     .device-key {
         transition: none;
     }
+
+    /* Dialogs (ui/dialog) appear at once, without their stepped fade. */
+    [data-slot='dialog-content'],
+    [data-slot='dialog-overlay'] {
+        animation: none;
+    }
 }

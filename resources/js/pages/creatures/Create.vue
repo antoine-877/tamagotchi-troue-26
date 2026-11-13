@@ -5,6 +5,7 @@ import CreatureController from '@/actions/App/Http/Controllers/CreatureControlle
 import CreatureSprite from '@/components/CreatureSprite.vue';
 import InputError from '@/components/InputError.vue';
 import LcdScreen from '@/components/LcdScreen.vue';
+import PageMasthead from '@/components/PageMasthead.vue';
 import TamagotchiDevice from '@/components/TamagotchiDevice.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,7 +18,7 @@ import { create } from '@/routes/creatures';
 defineOptions({
     layout: {
         breadcrumbs: [
-            { title: 'Mes créatures', href: dashboard() },
+            { title: 'Mon tamagotchi', href: dashboard() },
             { title: 'Adopter une créature', href: create() },
         ],
         bleed: true,
@@ -50,23 +51,23 @@ const preview = computed(() =>
 <template>
     <Head title="Adopter une créature" />
 
+    <PageMasthead aria-labelledby="adopt-title" kicker="Fiche d'adoption">
+        <h1
+            id="adopt-title"
+            class="pixel-title text-[clamp(3rem,10vw,6rem)] uppercase"
+        >
+            Adopter
+        </h1>
+        <p class="mt-3 max-w-[520px] text-lg text-pretty">
+            Choisissez une espèce, donnez-lui un nom&nbsp;: elle arrive dans
+            votre enclos avec des jauges à moitié pleines.
+        </p>
+    </PageMasthead>
+
     <div
-        class="mx-auto grid w-full max-w-[1280px] gap-10 px-4 pt-6 pb-12 sm:px-8 lg:grid-cols-12 lg:gap-x-8"
+        class="mx-auto grid w-full max-w-[1280px] gap-10 px-4 pt-8 pb-14 sm:px-8 lg:grid-cols-12 lg:gap-x-8"
     >
         <div class="flex min-w-0 flex-col gap-6 lg:col-span-7">
-            <header class="flex flex-col gap-2 border-b-4 border-border pb-4">
-                <p class="kicker">Fiche d'adoption</p>
-                <h1
-                    class="pixel-title text-[clamp(2.5rem,9vw,4.5rem)] uppercase"
-                >
-                    Adopter
-                </h1>
-                <p class="max-w-[520px] text-pretty">
-                    Choisissez une espèce, donnez-lui un nom&nbsp;: elle arrive
-                    dans votre enclos avec des jauges à moitié pleines.
-                </p>
-            </header>
-
             <Form
                 v-bind="CreatureController.store.form()"
                 v-slot="{ errors, processing }"
@@ -157,8 +158,7 @@ const preview = computed(() =>
                 :state="preview ? 'happy' : 'idle'"
             />
             <p
-                class="mt-3 max-w-full text-center pixel-title text-[26px] break-words"
-                aria-live="polite"
+                class="mt-3 max-w-full text-center pixel-title text-[28px] break-words"
             >
                 {{ name.trim() || (chosen ? 'Sans nom' : 'Un œuf attend') }}
             </p>

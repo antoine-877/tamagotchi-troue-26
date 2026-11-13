@@ -1,9 +1,13 @@
 <script setup>
-import { Head, Link, usePage } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import CreatureSprite from '@/components/CreatureSprite.vue';
 import LcdScreen from '@/components/LcdScreen.vue';
 import LeaderboardPodiumPlace from '@/components/LeaderboardPodiumPlace.vue';
+import PageMasthead from '@/components/PageMasthead.vue';
+import SectionHeading from '@/components/SectionHeading.vue';
+import TextLink from '@/components/TextLink.vue';
+import { twoDigits } from '@/lib/format';
 import { moodOf } from '@/lib/mood';
 import { species } from '@/lib/species';
 import { leaderboard } from '@/routes';
@@ -24,7 +28,6 @@ const page = usePage();
 
 const score = (creature) => creature.food + creature.mood + creature.energy;
 const isMine = (creature) => creature.user.id === page.props.auth.user?.id;
-const rank = (position) => String(position).padStart(2, '0');
 
 const podium = computed(() => props.creatures.slice(0, 3));
 const others = computed(() => props.creatures.slice(3));
@@ -36,60 +39,55 @@ const podiumOrder = { 0: 'lg:order-2', 1: 'lg:order-1', 2: 'lg:order-3' };
 <template>
     <Head title="Classement" />
 
-    <section
-        aria-labelledby="leaderboard-title"
-        class="bg-ink px-4 pt-5 pb-10 text-paper [--ring:var(--color-acid)] sm:px-8 dark:border-b-2 dark:border-paper"
-    >
-        <div class="mx-auto max-w-[1216px]">
-            <div
-                class="mb-4 flex flex-wrap justify-between gap-x-6 gap-y-1 border-b-2 border-paper pb-2"
-            >
-                <span class="kicker">Classement · les dix premières</span>
-                <span class="kicker text-acid">
-                    Score = nourriture + humeur + énergie
-                </span>
-            </div>
+    <PageMasthead aria-labelledby="leaderboard-title" tone="ink">
+        <template #bar>
+            <span class="kicker">Classement · les dix premières</span>
+            <span class="kicker text-acid">
+                Score = nourriture + humeur + énergie
+            </span>
+        </template>
 
-            <h1
-                id="leaderboard-title"
-                class="pixel-title text-[clamp(2.75rem,9vw,7rem)] uppercase"
-            >
-                Les plus heureuses
-            </h1>
+        <h1
+            id="leaderboard-title"
+            class="pixel-title text-[clamp(2.75rem,9vw,7rem)] uppercase"
+        >
+            Les plus heureuses
+        </h1>
 
-            <ol
-                v-if="podium.length"
-                class="mt-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-center lg:gap-5"
+        <h2 v-if="podium.length" class="sr-only">Podium</h2>
+        <ol
+            v-if="podium.length"
+            class="mt-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-center lg:gap-5"
+        >
+            <li
+                v-for="(creature, position) in podium"
+                :key="creature.id"
+                class="flex lg:w-1/3"
+                :class="podiumOrder[position]"
             >
-                <li
-                    v-for="(creature, position) in podium"
-                    :key="creature.id"
-                    class="flex lg:w-1/3"
-                    :class="podiumOrder[position]"
-                >
-                    <LeaderboardPodiumPlace
-                        :creature="creature"
-                        :rank="position + 1"
-                        :score="score(creature)"
-                        :mine="isMine(creature)"
-                        class="w-full"
-                    />
-                </li>
-            </ol>
+                <LeaderboardPodiumPlace
+                    :creature="creature"
+                    :rank="position + 1"
+                    :score="score(creature)"
+                    :mine="isMine(creature)"
+                    class="w-full"
+                />
+            </li>
+        </ol>
 
-            <p v-else class="mt-6 max-w-[520px] text-lg">
-                Personne au classement pour l'instant. Adoptez une créature pour
-                ouvrir la course.
-            </p>
-        </div>
-    </section>
+        <p v-else class="mt-6 max-w-[520px] text-lg">
+            Personne au classement pour l'instant. Adoptez une créature pour
+            ouvrir la course.
+        </p>
+    </PageMasthead>
 
     <section
         v-if="others.length"
-        aria-label="Suite du classement"
+        aria-labelledby="rest-title"
         class="mx-auto w-full max-w-[1280px] px-4 pt-8 pb-14 sm:px-8"
     >
-        <ol :start="4" class="border-t-4 border-border">
+        <SectionHeading id="rest-title" title="Suite du classement" />
+        <ol :start="4">
             <li
                 v-for="(creature, index) in others"
                 :key="creature.id"
@@ -102,7 +100,7 @@ const podiumOrder = { 0: 'lg:order-2', 1: 'lg:order-1', 2: 'lg:order-3' };
                 <span
                     class="w-12 font-mono text-3xl leading-none font-bold sm:w-16 sm:text-[40px]"
                 >
-                    {{ rank(index + 4) }}
+                    {{ twoDigits(index + 4) }}
                 </span>
                 <LcdScreen
                     :grain="4"
@@ -142,15 +140,13 @@ const podiumOrder = { 0: 'lg:order-2', 1: 'lg:order-1', 2: 'lg:order-3' };
                                 >·</span
                             >
                             chez
-                            <Link
+                            <TextLink
                                 :href="show(creature.user.id)"
-                                class="inline-flex min-h-11 items-center [overflow-wrap:anywhere] underline decoration-2 underline-offset-4 hover:decoration-4"
-                                :class="
-                                    isMine(creature) ? 'text-ink' : 'text-link'
-                                "
+                                :plain="isMine(creature)"
+                                class="[overflow-wrap:anywhere]"
                             >
                                 {{ creature.user.name }}
-                            </Link>
+                            </TextLink>
                         </p>
                     </div>
                 </div>

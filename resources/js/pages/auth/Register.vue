@@ -39,7 +39,6 @@ defineOptions({
                     type="text"
                     required
                     v-focus
-                    :tabindex="1"
                     autocomplete="name"
                     name="name"
                     placeholder="Nom complet"
@@ -53,7 +52,6 @@ defineOptions({
                     id="email"
                     type="email"
                     required
-                    :tabindex="2"
                     autocomplete="email"
                     name="email"
                     placeholder="nom@exemple.be"
@@ -66,7 +64,6 @@ defineOptions({
                 <PasswordInput
                     id="password"
                     required
-                    :tabindex="3"
                     autocomplete="new-password"
                     name="password"
                     placeholder="Mot de passe"
@@ -82,7 +79,6 @@ defineOptions({
                 <PasswordInput
                     id="password_confirmation"
                     required
-                    :tabindex="4"
                     autocomplete="new-password"
                     name="password_confirmation"
                     placeholder="Confirmer le mot de passe"
@@ -94,7 +90,6 @@ defineOptions({
             <Button
                 type="submit"
                 class="mt-2 w-full"
-                tabindex="5"
                 :disabled="processing"
                 data-test="register-user-button"
             >
@@ -105,10 +100,7 @@ defineOptions({
 
         <div class="text-center text-sm text-muted-foreground">
             Vous avez déjà un compte ?
-            <TextLink
-                :href="login()"
-                class="underline underline-offset-4"
-                :tabindex="6"
+            <TextLink :href="login()" class="underline underline-offset-4"
                 >Se connecter</TextLink
             >
         </div>

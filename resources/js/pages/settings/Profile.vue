@@ -4,7 +4,7 @@ import { Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import DeleteUser from '@/components/DeleteUser.vue';
-import Heading from '@/components/Heading.vue';
+import SectionHeading from '@/components/SectionHeading.vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,6 +20,7 @@ defineOptions({
                 href: edit(),
             },
         ],
+        bleed: true,
     },
 });
 
@@ -30,11 +31,8 @@ const user = computed(() => page.props.auth.user);
 <template>
     <Head title="Réglages du profil" />
 
-    <h1 class="sr-only">Réglages du profil</h1>
-
     <div class="flex flex-col space-y-6">
-        <Heading
-            variant="small"
+        <SectionHeading
             title="Profil"
             description="Modifiez votre nom et votre adresse e-mail"
         />
