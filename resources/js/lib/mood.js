@@ -75,6 +75,16 @@ export function reactionOf(action, creature) {
         };
     }
 
+    if (action === 'feed') {
+        return {
+            state: 'happy',
+            tone: 'acid',
+            word: 'repue',
+            headline: `Miam ! ${name} se régale.`,
+            status: `${name} mâchouille son repas.`,
+        };
+    }
+
     return {
         state: 'happy',
         tone: 'acid',

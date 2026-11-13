@@ -85,7 +85,7 @@ const scissors = [
                     <InputError
                         v-if="errors.code"
                         :message="errors.code"
-                        class="self-start border-2 border-ink bg-paper px-2 py-1 [&_p]:!text-alert"
+                        class="self-start border-2 border-ink bg-paper px-2 py-1 [--destructive:var(--color-alert)]"
                     />
                 </Form>
             </div>

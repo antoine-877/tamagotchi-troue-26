@@ -1,9 +1,9 @@
 export const species = {
-    dragon: { emoji: '🐉', label: 'Dragon' },
-    cat: { emoji: '🐱', label: 'Chat' },
-    octopus: { emoji: '🐙', label: 'Poulpe' },
-    fox: { emoji: '🦊', label: 'Renard' },
-    rabbit: { emoji: '🐰', label: 'Lapin' },
+    dragon: { label: 'Dragon' },
+    cat: { label: 'Chat' },
+    octopus: { label: 'Poulpe' },
+    fox: { label: 'Renard' },
+    rabbit: { label: 'Lapin' },
 };
 
 export const gauges = {

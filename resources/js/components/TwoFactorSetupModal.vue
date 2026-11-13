@@ -114,11 +114,9 @@ watch(
     <Dialog :open="isOpen" @update:open="isOpen = $event">
         <DialogContent class="sm:max-w-md">
             <DialogHeader class="flex items-center justify-center">
-                <div
-                    class="mb-3 w-auto rounded-full border border-border bg-card p-0.5 shadow-sm"
-                >
+                <div class="mb-3 w-auto border-2 border-border bg-card p-0.5">
                     <div
-                        class="relative overflow-hidden rounded-full border border-border bg-muted p-2.5"
+                        class="relative overflow-hidden border-2 border-border bg-muted p-2.5"
                     >
                         <div
                             class="absolute inset-0 grid grid-cols-5 opacity-50"
@@ -159,11 +157,11 @@ watch(
                             class="relative mx-auto flex max-w-md items-center overflow-hidden"
                         >
                             <div
-                                class="relative mx-auto aspect-square w-64 overflow-hidden rounded-lg border border-border"
+                                class="relative mx-auto aspect-square w-64 overflow-hidden border-2 border-border"
                             >
                                 <div
                                     v-if="!qrCodeSvg"
-                                    class="absolute inset-0 z-10 flex aspect-square h-auto w-full animate-pulse items-center justify-center bg-background"
+                                    class="lcd-blink absolute inset-0 z-10 flex aspect-square h-auto w-full items-center justify-center bg-background"
                                 >
                                     <Spinner class="size-6" />
                                 </div>
@@ -206,7 +204,7 @@ watch(
                             class="flex w-full items-center justify-center space-x-2"
                         >
                             <div
-                                class="flex w-full items-stretch overflow-hidden rounded-xl border border-border"
+                                class="flex w-full items-stretch overflow-hidden border-2 border-border"
                             >
                                 <div
                                     v-if="!manualSetupKey"
@@ -227,7 +225,7 @@ watch(
                                     >
                                         <Check
                                             v-if="copied"
-                                            class="w-4 text-green-500"
+                                            class="w-4 text-link"
                                         />
                                         <Copy v-else class="w-4" />
                                     </button>

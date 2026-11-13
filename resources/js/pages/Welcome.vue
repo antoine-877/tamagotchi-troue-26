@@ -55,22 +55,7 @@ function press(action) {
     }, 3000);
 }
 
-// mood.js has no reaction for food: this one belongs to the demo.
-function feedReaction(name) {
-    return {
-        state: 'happy',
-        tone: 'acid',
-        word: 'repue',
-        headline: `Miam. ${name} se lèche les babines.`,
-        status: `${name} mâchouille son repas.`,
-    };
-}
-
 const mood = computed(() => {
-    if (reaction.value === 'feed') {
-        return feedReaction(pet.name);
-    }
-
     return reaction.value ? reactionOf(reaction.value, pet) : moodOf(pet);
 });
 

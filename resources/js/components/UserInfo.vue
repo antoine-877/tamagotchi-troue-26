@@ -22,9 +22,11 @@ const showAvatar = computed(
 </script>
 
 <template>
-    <Avatar class="h-8 w-8 overflow-hidden rounded-lg">
+    <Avatar class="h-8 w-8 overflow-hidden rounded-none border-2 border-border">
         <AvatarImage v-if="showAvatar" :src="user.avatar!" :alt="user.name" />
-        <AvatarFallback class="rounded-lg text-black dark:text-white">
+        <AvatarFallback
+            class="rounded-none bg-accent font-mono font-bold text-accent-foreground"
+        >
             {{ getInitials(user.name) }}
         </AvatarFallback>
     </Avatar>

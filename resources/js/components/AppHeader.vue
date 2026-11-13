@@ -18,6 +18,9 @@ const page = usePage();
 const user = computed(() => page.props.auth.user);
 const { isCurrentUrl, isCurrentOrParentUrl } = useCurrentUrl();
 
+// An error page belongs to no section, whatever its address says.
+const isErrorPage = computed(() => page.component === 'ErrorPage');
+
 // Numbered like the sections of a magazine.
 const sections = computed(() => [
     {
@@ -25,25 +28,26 @@ const sections = computed(() => [
         title: 'Mon tamagotchi',
         href: dashboard(),
         current:
-            isCurrentUrl(dashboard()) || isCurrentOrParentUrl('/creatures'),
+            !isErrorPage.value &&
+            (isCurrentUrl(dashboard()) || isCurrentOrParentUrl('/creatures')),
     },
     {
         number: '02',
         title: 'Enclos',
         href: enclosure(user.value.id),
-        current: isCurrentUrl(enclosure(user.value.id)),
+        current: !isErrorPage.value && isCurrentUrl(enclosure(user.value.id)),
     },
     {
         number: '03',
         title: 'Classement',
         href: leaderboard(),
-        current: isCurrentUrl(leaderboard()),
+        current: !isErrorPage.value && isCurrentUrl(leaderboard()),
     },
     {
         number: '04',
         title: 'Magasin',
         href: shop(),
-        current: isCurrentOrParentUrl(shop()),
+        current: !isErrorPage.value && isCurrentOrParentUrl(shop()),
     },
 ]);
 </script>
