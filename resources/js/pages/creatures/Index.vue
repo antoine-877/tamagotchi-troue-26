@@ -110,7 +110,7 @@ const fileCaption = computed(() =>
             >
                 <TamagotchiDevice :creature="creature" :state="mood.state">
                     <template v-if="creature" #default>
-                        <Link :href="shop()" class="device-key"> Nourrir </Link>
+                        <Link :href="shop()" class="device-key"> Magasin </Link>
                         <Form
                             v-bind="CreatureController.play.form(creature.id)"
                             :options="{ preserveScroll: true }"
@@ -152,9 +152,10 @@ const fileCaption = computed(() =>
                     {{ mood.headline }}
                 </p>
                 <p v-if="creature" class="max-w-[520px] text-pretty">
-                    Trois touches sur le boîtier&nbsp;: «&nbsp;Nourrir&nbsp;»
-                    mène au magasin, «&nbsp;Jouer&nbsp;» remonte son humeur,
-                    «&nbsp;Dodo&nbsp;» recharge son énergie.
+                    Pas d'inventaire&nbsp;: un article acheté au magasin est
+                    donné aussitôt à la créature choisie, et sa jauge monte tout
+                    de suite, sans dépasser 100. «&nbsp;Jouer&nbsp;» remonte son
+                    humeur, «&nbsp;Dodo&nbsp;» recharge son énergie.
                 </p>
                 <Button v-else as-child size="lg" class="self-start">
                     <Link :href="create()">Adopter une créature</Link>
@@ -231,7 +232,10 @@ const fileCaption = computed(() =>
             <PixelIcon name="shop" class="size-10" />
             <h2 id="shop-title" class="kicker">04 · Au magasin</h2>
             <p class="pixel-title text-[28px]">De quoi la régaler</p>
-            <p>Nourriture, jouets et repos pour vos créatures.</p>
+            <p>
+                Nourriture, jouets et repos, donnés dès l'achat à la créature de
+                votre choix.
+            </p>
             <TextLink :href="shop()" plain class="mt-auto">
                 Aller au magasin
             </TextLink>
