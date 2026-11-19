@@ -26,7 +26,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('magasin', [ShopController::class, 'index'])->name('shop.index');
     Route::post('magasin/{item}/acheter', [PurchaseController::class, 'store'])->name('purchases.store');
-    Route::post('codes-cadeau', [GiftCodeController::class, 'store'])->name('gift-codes.store');
+    Route::post('codes-cadeau', [GiftCodeController::class, 'store'])->middleware('throttle:5,1')->name('gift-codes.store');
 });
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';
