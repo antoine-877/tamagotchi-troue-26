@@ -277,12 +277,14 @@ const fieldClass =
                                     name="quantity"
                                     type="number"
                                     min="1"
+                                    max="10"
                                     default-value="1"
                                     class="font-mono"
                                 />
                             </div>
                         </div>
                         <InputError :message="errors.quantity" />
+                        <InputError :message="errors.creature_id" />
 
                         <Button
                             type="submit"

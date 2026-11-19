@@ -22,7 +22,7 @@ class ShopController extends Controller
 
         return Inertia::render('shop/Index', [
             'items' => $items->orderBy('name')->get()->map(fn(Item $item) => [
-                ...$item->only('id', 'name', 'description', 'effect', 'effect_value', 'stock', 'price_cents'),
+                ...$item->only('id', 'name', 'description', 'effect', 'effect_value', 'stock'),
                 'price' => Money::format($item->price_cents),
             ]),
             'search' => $search,

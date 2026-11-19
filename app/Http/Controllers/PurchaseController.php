@@ -8,16 +8,21 @@ use App\Models\Purchase;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Validation\Rule;
 
 class PurchaseController extends Controller
 {
     public function store(Request $request, Item $item): RedirectResponse
     {
         $user = $request->user();
+        $validated = $request->validate([
+            'quantity' => ['required', 'integer', 'min:1', 'max:10'],
+            'creature_id' => ['required', 'integer', Rule::exists('creatures', 'id')->where('user_id', $user->id)],
+        ]);
         $creature = Creature::findOrFail($request->integer('creature_id'));
 
-        $quantity = $request->integer('quantity', 1);
-        $price = $request->integer('price_cents');
+        $quantity = $validated['quantity'];
+        $price = $item->price_cents;
         $total = $price * $quantity;
 
         if ($item->stock < $quantity) {
