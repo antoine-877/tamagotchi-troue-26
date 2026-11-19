@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateEnclosureRequest;
+use App\Models\Creature;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -19,7 +20,13 @@ class EnclosureController extends Controller
             'isOwner' => $request->user()->is($user),
             'creatures' => $user->creatures()
                 ->orderBy('name')
-                ->get(['id', 'name', 'species', 'food', 'mood', 'energy']),
+                ->get()
+                ->map(fn(Creature $creature) => [
+                    ...$creature->only('id', 'name', 'species', 'food', 'mood', 'energy'),
+                    'can' => [
+                        'update' => $request->user()->can('update', $creature),
+                    ],
+                ]),
             'messages' => $user->receivedMessages()
                 ->with('author:id,name')
                 ->latest()
@@ -35,7 +42,7 @@ class EnclosureController extends Controller
 
     public function update(UpdateEnclosureRequest $request): RedirectResponse
     {
-        $request->user()->update($request->all());
+        $request->user()->update($request->validated());
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Enclos mis à jour.']);
 

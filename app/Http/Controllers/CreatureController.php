@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Support\Facades\Gate;
 
 class CreatureController extends Controller
 {
@@ -39,6 +40,8 @@ class CreatureController extends Controller
 
     public function edit(Creature $creature): Response
     {
+        Gate::authorize('update', $creature);
+
         return Inertia::render('creatures/Edit', [
             'creature' => $creature->only('id', 'name', 'species', 'food', 'mood', 'energy'),
         ]);
@@ -46,6 +49,8 @@ class CreatureController extends Controller
 
     public function update(UpdateCreatureRequest $request, Creature $creature): RedirectResponse
     {
+        Gate::authorize('update', $creature);
+
         $creature->update($request->validated());
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Créature renommée.']);
@@ -55,6 +60,8 @@ class CreatureController extends Controller
 
     public function destroy(Creature $creature): RedirectResponse
     {
+        Gate::authorize('delete', $creature);
+
         $creature->delete();
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Créature relâchée.']);
@@ -64,6 +71,8 @@ class CreatureController extends Controller
 
     public function play(Creature $creature): RedirectResponse
     {
+        Gate::authorize('update', $creature);
+        
         $creature->update([
             'mood' => min(100, $creature->mood + 15),
             'food' => max(0, $creature->food - 10),
@@ -75,6 +84,8 @@ class CreatureController extends Controller
 
     public function sleep(Creature $creature): RedirectResponse
     {
+        Gate::authorize('update', $creature);
+        
         $creature->update([
             'energy' => min(100, $creature->energy + 25),
             'food' => max(0, $creature->food - 5),

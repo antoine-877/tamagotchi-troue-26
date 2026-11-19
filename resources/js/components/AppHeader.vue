@@ -1,51 +1,51 @@
 <script setup lang="ts">
-import { Link, usePage } from '@inertiajs/vue3';
-import { computed } from 'vue';
-import AppLogo from '@/components/AppLogo.vue';
+import { Link, usePage } from "@inertiajs/vue3";
+import { computed } from "vue";
+import AppLogo from "@/components/AppLogo.vue";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import UserMenuContent from '@/components/UserMenuContent.vue';
-import { useCurrentUrl } from '@/composables/useCurrentUrl';
-import { getInitials } from '@/composables/useInitials';
-import { dashboard, leaderboard } from '@/routes';
-import { show as enclosure } from '@/routes/enclosures';
-import { index as shop } from '@/routes/shop';
+} from "@/components/ui/dropdown-menu";
+import UserMenuContent from "@/components/UserMenuContent.vue";
+import { useCurrentUrl } from "@/composables/useCurrentUrl";
+import { getInitials } from "@/composables/useInitials";
+import { dashboard, leaderboard } from "@/routes";
+import { show as enclosure } from "@/routes/enclosures";
+import { index as shop } from "@/routes/shop";
 
 const page = usePage();
 const user = computed(() => page.props.auth.user);
 const { isCurrentUrl, isCurrentOrParentUrl } = useCurrentUrl();
 
 // An error page belongs to no section, whatever its address says.
-const isErrorPage = computed(() => page.component === 'ErrorPage');
+const isErrorPage = computed(() => page.component === "ErrorPage");
 
 // Numbered like the sections of a magazine.
 const sections = computed(() => [
     {
-        number: '01',
-        title: 'Mon tamagotchi',
+        number: "01",
+        title: "Mon tamagotchi",
         href: dashboard(),
         current:
             !isErrorPage.value &&
-            (isCurrentUrl(dashboard()) || isCurrentOrParentUrl('/creatures')),
+            (isCurrentUrl(dashboard()) || isCurrentOrParentUrl("/creatures")),
     },
     {
-        number: '02',
-        title: 'Enclos',
+        number: "02",
+        title: "Enclos",
         href: enclosure(user.value.id),
         current: !isErrorPage.value && isCurrentUrl(enclosure(user.value.id)),
     },
     {
-        number: '03',
-        title: 'Classement',
+        number: "03",
+        title: "Classement",
         href: leaderboard(),
         current: !isErrorPage.value && isCurrentUrl(leaderboard()),
     },
     {
-        number: '04',
-        title: 'Magasin',
+        number: "04",
+        title: "Magasin",
         href: shop(),
         current: !isErrorPage.value && isCurrentOrParentUrl(shop()),
     },
@@ -92,9 +92,9 @@ const sections = computed(() => [
             <div class="ml-auto flex items-center gap-3 sm:gap-5">
                 <p class="flex items-baseline gap-2">
                     <span class="kicker max-sm:sr-only">Solde</span>
-                    <span class="font-mono text-lg font-bold sm:text-[22px]"
-                        >{{ $page.props.auth.user.balance }} €</span
-                    >
+                    <span class="font-mono text-lg font-bold sm:text-[22px]">{{
+                        $page.props.auth.balance
+                    }}</span>
                 </p>
 
                 <DropdownMenu>

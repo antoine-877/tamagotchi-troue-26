@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $price
  * @property int $stock
  */
-#[Fillable(['name', 'description', 'effect', 'effect_value', 'price', 'stock'])]
+#[Fillable(['name', 'description', 'effect', 'effect_value', 'price_cents', 'stock'])]
 class Item extends Model
 {
     /** @use HasFactory<ItemFactory> */
@@ -28,7 +28,7 @@ class Item extends Model
     protected function casts(): array
     {
         return [
-            'price' => 'float',
+            'price_cents' => 'integer',
         ];
     }
 }

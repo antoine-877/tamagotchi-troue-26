@@ -13,7 +13,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $quantity
  * @property float $total
  */
-#[Fillable(['user_id', 'item_id', 'creature_id', 'quantity', 'total'])]
+#[Fillable(['user_id', 'item_id', 'creature_id', 'quantity', 'total_cents'])]
+
 class Purchase extends Model
 {
     /**
@@ -22,7 +23,7 @@ class Purchase extends Model
     protected function casts(): array
     {
         return [
-            'total' => 'float',
+            'total_cents' => 'integer',
         ];
     }
 }

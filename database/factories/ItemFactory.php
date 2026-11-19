@@ -20,7 +20,7 @@ class ItemFactory extends Factory
             'description' => fake()->sentence(),
             'effect' => 'food',
             'effect_value' => 10,
-            'price' => 2.50,
+            'price_cents' => 2.50,
             'stock' => 20,
         ];
     }

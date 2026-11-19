@@ -1,23 +1,23 @@
 <script setup>
-import { Form, Head, Link } from '@inertiajs/vue3';
-import PurchaseController from '@/actions/App/Http/Controllers/PurchaseController';
-import ShopController from '@/actions/App/Http/Controllers/ShopController';
-import GiftCodeTicket from '@/components/GiftCodeTicket.vue';
-import InputError from '@/components/InputError.vue';
-import PageMasthead from '@/components/PageMasthead.vue';
-import PixelIcon from '@/components/PixelIcon.vue';
-import ShopItemScreen from '@/components/ShopItemScreen.vue';
-import TextLink from '@/components/TextLink.vue';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { twoDigits } from '@/lib/format';
-import { gauges } from '@/lib/species';
-import { create } from '@/routes/creatures';
-import { index } from '@/routes/shop';
+import { Form, Head, Link } from "@inertiajs/vue3";
+import PurchaseController from "@/actions/App/Http/Controllers/PurchaseController";
+import ShopController from "@/actions/App/Http/Controllers/ShopController";
+import GiftCodeTicket from "@/components/GiftCodeTicket.vue";
+import InputError from "@/components/InputError.vue";
+import PageMasthead from "@/components/PageMasthead.vue";
+import PixelIcon from "@/components/PixelIcon.vue";
+import ShopItemScreen from "@/components/ShopItemScreen.vue";
+import TextLink from "@/components/TextLink.vue";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { twoDigits } from "@/lib/format";
+import { gauges } from "@/lib/species";
+import { create } from "@/routes/creatures";
+import { index } from "@/routes/shop";
 
 defineOptions({
     layout: {
-        breadcrumbs: [{ title: 'Magasin', href: index() }],
+        breadcrumbs: [{ title: "Magasin", href: index() }],
         bleed: true,
     },
 });
@@ -29,7 +29,7 @@ defineProps({
 });
 
 const fieldClass =
-    'h-11 w-full min-w-0 border-2 border-input bg-background px-3 text-base font-bold';
+    "h-11 w-full min-w-0 border-2 border-input bg-background px-3 text-base font-bold";
 </script>
 
 <template>
@@ -86,7 +86,7 @@ const fieldClass =
             <span>
                 <span class="font-bold text-acid">EN RAYON</span> ·
                 {{ items.length }}
-                {{ items.length > 1 ? 'articles' : 'article' }}
+                {{ items.length > 1 ? "articles" : "article" }}
                 <template v-if="search">pour « {{ search }} »</template>
             </span>
             <Link
@@ -167,7 +167,7 @@ const fieldClass =
                             <span class="block kicker text-[11px]">Prix</span>
                             <span
                                 class="block font-mono text-[clamp(2.25rem,4vw,2.75rem)] leading-none font-bold whitespace-nowrap"
-                                >{{ item.price }} €</span
+                                >{{ item.price }}</span
                             >
                         </p>
                     </div>
@@ -230,7 +230,11 @@ const fieldClass =
                         v-slot="{ errors, processing }"
                         class="flex flex-col gap-3 border-t-4 border-border bg-muted p-4"
                     >
-                        <input type="hidden" name="price" :value="item.price" />
+                        <input
+                            type="hidden"
+                            name="price_cents"
+                            :value="item.price_cents"
+                        />
 
                         <div class="grid grid-cols-[1fr_6rem] gap-2.5">
                             <div class="flex min-w-0 flex-col gap-1">

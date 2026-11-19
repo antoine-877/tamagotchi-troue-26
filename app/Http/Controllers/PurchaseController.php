@@ -17,27 +17,28 @@ class PurchaseController extends Controller
         $creature = Creature::findOrFail($request->integer('creature_id'));
 
         $quantity = $request->integer('quantity', 1);
-        $price = $request->float('price');
+        $price = $request->integer('price_cents');
         $total = $price * $quantity;
 
         if ($item->stock < $quantity) {
             return back()->withErrors(['quantity' => 'Il n\'en reste pas assez en stock.']);
         }
 
-        if ($user->balance < $total) {
+        if ($user->balance_cents < $total) {
             return back()->withErrors(['quantity' => 'Votre solde est insuffisant.']);
         }
 
         $item->update(['stock' => $item->stock - $quantity]);
 
-        $user->update(['balance' => $user->balance - $total]);
+        $user->balance_cents -= $total;
+        $user->save();
 
         Purchase::create([
             'user_id' => $user->id,
             'item_id' => $item->id,
             'creature_id' => $creature->id,
             'quantity' => $quantity,
-            'total' => $total,
+            'total_cents' => $total,
         ]);
 
         $gauge = $item->effect;

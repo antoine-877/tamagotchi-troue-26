@@ -15,7 +15,7 @@ use Illuminate\Support\Carbon;
  * @property int|null $redeemed_by
  * @property Carbon|null $redeemed_at
  */
-#[Fillable(['code', 'amount', 'redeemed_by', 'redeemed_at'])]
+#[Fillable(['code', 'amount_cents', 'redeemed_by', 'redeemed_at'])]
 class GiftCode extends Model
 {
     /** @use HasFactory<GiftCodeFactory> */
@@ -27,7 +27,7 @@ class GiftCode extends Model
     protected function casts(): array
     {
         return [
-            'amount' => 'float',
+            'amount_cents' => 'integer',
             'redeemed_at' => 'datetime',
         ];
     }

@@ -17,7 +17,7 @@ class GiftCodeFactory extends Factory
     {
         return [
             'code' => fake()->unique()->numerify('####'),
-            'amount' => 5,
+            'amount_cents' => 5,
         ];
     }
 }
